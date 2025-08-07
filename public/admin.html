@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-4">
+    <h2>Admin Login</h2>
+    <form id="loginForm">
+      <input type="text" name="username" placeholder="Username" class="form-control mb-2" required>
+      <input type="password" name="password" placeholder="Password" class="form-control mb-2" required>
+      <button type="submit" class="btn btn-success">Login</button>
+    </form>
+    <div id="adminDashboard" style="display:none;">
+      <h3 class="mt-4">Feedback Table</h3>
+      <table class="table table-bordered" id="feedbackTable"></table>
+      <canvas id="feedbackChart" width="400" height="200"></canvas>
+      <button id="exportCsv" class="btn btn-secondary mt-2">Export CSV</button>
+      <button id="exportPdf" class="btn btn-secondary mt-2">Export PDF</button>
+    </div>
+  </div>
+  <script src="js/admin.js"></script>
+</body>
+</html>
