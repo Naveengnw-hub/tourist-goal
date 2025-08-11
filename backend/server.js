@@ -7,27 +7,12 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-
-// --- Enhanced CORS Configuration ---
-// This code is correct for allowing your local frontend to connect.
+// --- FINAL Enhanced CORS Configuration ---
+// This now includes your final Netlify URL.
 app.use(cors({
     origin: ['http://127.0.0.1:5500', 'http://localhost:5500', 'https://tourism-nwp.netlify.app'],
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-}));
-
-// The browser sends an OPTIONS request first for file uploads.
-// This tells the browser that the actual POST request is okay.
-app.options('*', cors());
-
-// ... (the rest of the file is correct)
-// This is the main fix. It's more specific and robustly handles
-// the preflight 'OPTIONS' requests that browsers send for file uploads.
-app.use(cors({
-    origin: ['http://127.0.0.1:5500', 'http://localhost:5500'], // Allow your local frontend
-    methods: ['GET', 'POST', 'OPTIONS'], // Explicitly allow methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Explicitly allow headers
     credentials: true
 }));
 
