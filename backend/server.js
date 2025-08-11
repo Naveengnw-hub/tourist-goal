@@ -11,9 +11,9 @@ const PORT = process.env.PORT || 3000;
 // --- Enhanced CORS Configuration ---
 // This code is correct for allowing your local frontend to connect.
 app.use(cors({
-    origin: ['http://127.0.0.1:5500', 'http://localhost:5500'], // Allow your local frontend
-    methods: ['GET', 'POST', 'OPTIONS'], // Explicitly allow methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Explicitly allow headers
+    origin: ['http://127.0.0.1:5500', 'http://localhost:5500', 'https://tourism-nwp.netlify.app'],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 
