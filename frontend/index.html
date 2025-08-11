@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NWP Tourism Portal</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header>
+    <div class="logo">NWP Tourism Portal</div>
+    <nav>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="analysis.html">Gap Analysis</a></li>
+        <li><a href="recommendations.html">Recommendations</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h2>Interactive Tourism Assets Map</h2>
+    <div id="filter-controls">
+      <button class="active" data-category="all">All</button>
+      <button data-category="religious">Religious</button>
+      <button data-category="heritage">Heritage</button>
+      <button data-category="nature">Nature</button>
+      <button data-category="accommodation">Accommodation</button>
+      <button data-category="urban">Urban</button>
+    </div>
+
+    <div class="page-layout">
+      <div class="main-content">
+        <div id="map" class="map-container"></div>
+      </div>
+      <div class="sidebar">
+        <div id="asset-description">
+          <h3>Asset Details</h3>
+          <p>Click a marker on the map to view its details here.</p>
+        </div>
+        <hr>
+        <div id="user-submission">
+          <h3>Contribute a New Location</h3>
+          <p>Know a place that's missing? Add it! Click on the map to get coordinates.</p>
+          <form id="user-feedback-form">
+            <label>Location Name:</label>
+            <input name="name" required>
+            <label>Description:</label>
+            <textarea name="description" required></textarea>
+            <div style="display: flex; gap: 1rem;">
+              <div style="flex: 1;">
+                <label>Latitude:</label>
+                <input id="latitude" name="latitude" readonly>
+              </div>
+              <div style="flex: 1;">
+                <label>Longitude:</label>
+                <input id="longitude" name="longitude" readonly>
+              </div>
+            </div>
+            <button type="submit">Submit New Location</button>
+          </form>
+          <p id="user-form-message"></p>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <section id="data-upload">
+      <div class="sidebar" style="max-inline-size:800px;margin:20px auto">
+        <h2>Contribute Data (Admins)</h2>
+        <p>Upload a GeoJSON file. This will overwrite existing map data.</p>
+        <form id="geojson-upload-form">
+          <label for="geojsonFile">Select GeoJSON file:</label>
+          <input type="file" id="geojsonFile" accept=".geojson,.json" required>
+          <button type="submit">Upload & Overwrite Data</button>
+        </form>
+        <p id="geojson-upload-status"></p>
+      </div>
+    </section>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/assets.js"></script>
+  <script src="js/upload.js"></script>
+</body>
+
+</html>
