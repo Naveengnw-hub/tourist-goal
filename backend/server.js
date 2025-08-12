@@ -7,18 +7,16 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// --- FINAL Enhanced CORS Configuration ---
-// This now includes your final Netlify URL.
-app.use(cors({
+// --- FINAL, CORRECT CORS CONFIGURATION ---
+// This gives permission to your live Netlify website.
+const corsOptions = {
     origin: ['http://127.0.0.1:5500', 'http://localhost:5500', 'https://tourism-nwp.netlify.app'],
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-}));
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
 
-// The browser sends an OPTIONS request first for file uploads.
-// This tells the browser that the actual POST request is okay.
-app.options('*', cors());
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // This handles the preflight requests shown in your screenshot
 
 app.use(express.json());
 
@@ -47,7 +45,6 @@ const writeData = async (filePath, data) => {
 
 // --- API Endpoints ---
 
-// [GET] /api/assets - Fetches all tourism location data
 app.get('/api/assets', async (req, res) => {
     try {
         const assets = await readData(TOURISM_DATA_PATH);
@@ -57,7 +54,6 @@ app.get('/api/assets', async (req, res) => {
     }
 });
 
-// [GET] /api/boundary - Fetches the province boundary data
 app.get('/api/boundary', async (req, res) => {
     try {
         const boundary = await readData(BOUNDARY_DATA_PATH);
@@ -67,7 +63,21 @@ app.get('/api/boundary', async (req, res) => {
     }
 });
 
-// [POST] /api/feedback - This handles the new user submission form
+app.get('/api/stats/category-distribution', async (req, res) => {
+    try {
+        const assetsData = await readData(TOURISM_DATA_PATH);
+        const counts = assetsData.features.reduce((acc, feature) => {
+            const category = feature.properties.category || 'Uncategorized';
+            acc[category] = (acc[category] || 0) + 1;
+            return acc;
+        }, {});
+        const result = Object.entries(counts).map(([category, count]) => ({ category, count: count.toString() }));
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve statistics' });
+    }
+});
+
 app.post('/api/feedback', async (req, res) => {
     try {
         const { name, description, latitude, longitude } = req.body;
@@ -75,9 +85,7 @@ app.post('/api/feedback', async (req, res) => {
             return res.status(400).json({ success: false, error: 'All fields are required.' });
         }
         const feedbackData = await readData(FEEDBACK_DATA_PATH);
-        const newFeedback = {
-            id: Date.now(), name, description, latitude, longitude, submittedAt: new Date().toISOString()
-        };
+        const newFeedback = { id: Date.now(), name, description, latitude, longitude, submittedAt: new Date().toISOString() };
         feedbackData.push(newFeedback);
         await writeData(FEEDBACK_DATA_PATH, feedbackData);
         res.json({ success: true, message: 'Thank you for your contribution!' });
@@ -86,7 +94,6 @@ app.post('/api/feedback', async (req, res) => {
     }
 });
 
-// [POST] /api/upload-geojson - Handles bulk GeoJSON upload for Admins
 const upload = multer({ storage: multer.memoryStorage() });
 app.post('/api/upload-geojson', upload.single('geojsonFile'), async (req, res) => {
     if (!req.file) return res.status(400).send('No file uploaded.');
@@ -105,7 +112,6 @@ function startServer(port) {
     const server = app.listen(port, () => {
         console.log(`✅ Backend server is running on http://localhost:${port}`);
     });
-
     server.on('error', (err) => {
         if (err.code === 'EADDRINUSE') {
             console.warn(`⚠️  Port ${port} is busy, trying port ${port + 1}...`);
@@ -115,13 +121,4 @@ function startServer(port) {
         }
     });
 }
-
-// ... all of your other code ...
-
-// --- Start the Server ---
-function startServer(port) {
-    // ... function content ...
-}
-
 startServer(PORT);
-// Final version pushed to server.
