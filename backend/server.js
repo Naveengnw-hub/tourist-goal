@@ -116,4 +116,12 @@ function startServer(port) {
     });
 }
 
+// ... all of your other code ...
+
+// --- Start the Server ---
+function startServer(port) {
+    // ... function content ...
+}
+
 startServer(PORT);
+// Final version pushed to server.
